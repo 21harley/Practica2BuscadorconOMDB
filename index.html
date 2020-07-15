@@ -4,23 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
     <title>Document</title>
 </head>
 <body>
-    <div class="registro" id="registro">
-        <form class="form" action="" method="post" onsubmit="return agregar();" >
-            <label class="form-entrada">name:</label> <input type="text" name="" id="name" required>
-            <label class="form-entrada">password:</label> <input type="text" name="" id="password" required>
-            <input type="submit" value="cargar" >
-        </form>
+
+    <div class="content" id="content">
+        <h1>Movies of yesterday and today</h1>
+        <div class="registro" id="registro">
+            <form class="form-registro" action="" method="post" onsubmit="return addUsu();" >
+                <label class="form-registro-entrada-name">Name</label> <input class="form-registro-entrada-name" type="text" name="" id="name" required>
+                <label class="form-registro-entrada-password">Password</label> <input class="form-registro-entrada-name" type="text" name="" id="password" required>
+                <input class="form-registro-entrada-submit" type="submit" value="Input" >
+            </form>
+        </div>
+        <div class="buscador" id="buscador">
+           <div class="form-buscador" action="" >
+             <label class="form-buscador-entrada-name">Name</label> <input class="form-buscador-entrada-name" type="text" name="" id="name1" required>
+             <input class="form-buscador-entrada-submit" type="submit" value="Input"  onclick="buscar()">
+           </div>
+            <button onclick="mostrar()" >mostrar</button>
+        </div>
     </div>
-    <div class="buscador" id="buscador">
-        <div>A</div>
-        <div>X</div>
-        <div>F</div>
-        <div>G</div>
-        <div>H</div>
-    </div>
+    <script src="script.js"></script>
+
 </body>
 </html>
