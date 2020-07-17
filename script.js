@@ -85,7 +85,7 @@ function mostrarBuscador(){
 }
 
 function buscar(){
-    const name='http://www.omdbapi.com/?s=';
+    const name='https://www.omdbapi.com/?s=';
     const bus=document.getElementById("name1").value;
     const http=name+bus+"&apikey=f160fc54";
     console.log(http);
