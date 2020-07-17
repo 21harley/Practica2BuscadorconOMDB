@@ -115,6 +115,7 @@ function buscar(){
 }
 
 function mostrar(){
+    setTimeout(mostrar,500);
     if(myRequest.Response.indexOf("T")==0){
         
         myRequest.Search.forEach(element=>{
