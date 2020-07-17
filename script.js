@@ -54,7 +54,7 @@ function addUsu(){
     registry.style.display="none";
 
     const seeker=document.getElementById("buscador");
-    seeker.style.display="block";
+    seeker.style.display="grid";
    
     let cont=0;
     if(usuLis.length>0){
@@ -85,18 +85,92 @@ function mostrarBuscador(){
 }
 
 function buscar(){
+    let poster=document.getElementById("taquilla").querySelectorAll("div.poster");
+    if(poster.length>0){
+        for(let i=0;i<poster.length;i++){
+            let p=poster[i].parentNode;
+            p.removeChild(poster[i]);
+        }
+    }
+
+    
     const name='https://www.omdbapi.com/?s=';
-    const bus=document.getElementById("name1").value;
+    let bus=new String(document.getElementById("name1").value);
+    let token=bus.split(" "),cont=0;bus="";
+    token.forEach(element => {
+       if(cont==0||token.length==cont+1){
+           bus+=element;
+       }else{
+           bus+="+"+element+"+";
+       }
+       cont++;   
+    });
     const http=name+bus+"&apikey=f160fc54";
-    console.log(http);
-    fetch(http)
-    .then(response=>response.json())
+    fetch(http).then(response=>response.json())
     .then(data =>{
-       console.log(data);
+       myRequest=data;
     })
-    .catch(err=>console.log(err))
+    .catch(err=>console.log(err));
+    setTimeout(mostrar,500);
 }
 
 function mostrar(){
-    console.log(myRequest);
+    if(myRequest.Response.indexOf("T")==0){
+        
+        myRequest.Search.forEach(element=>{
+            if(element.Type.indexOf("m")==0){
+                crear(element.Title.replace(/:/,""),element.Year,element.Poster);
+            }
+            
+        });
+        
+    }
+}
+function buscarInformacion(nombre){
+    let info=null,nombre1="";
+    for(let i=0;i<nombre.length;i++){
+        if(nombre[i]===" "){
+            nombre1+="+";
+        }else{
+            nombre1+=nombre[i];
+        }
+    }
+    const http='https://www.omdbapi.com/?t='+nombre1+"&apikey=f160fc54";
+    console.log(http);
+    fetch(http).then(response=>response.json())
+    .then(data =>{
+       info=data;
+    })
+    .catch(err=>console.log(err));
+}
+function crear(nombre,año,rutaImg){
+/*
+        <div class="poster">
+            <button>favorito</button>
+           <img  class="posterImg" src="https://m.media-amazon.com/images/M/MV5BMjMxNjY2MDU1OV5BMl5BanBnXkFtZTgwNzY1MTUwNTM@._V1_SX300.jpg" alt="">
+           <samp>Avengers: Infinity War</samp>
+           <samp>2018</samp>
+           <button>Info</button>
+        </div> 
+*/
+    const padre=document.getElementById("taquilla");
+    const newDiv=document.createElement("div"); newDiv.id="poster";
+    const botInf=document.createElement("button");
+    const img=document.createElement("img");
+    const botFav=document.createElement("button");
+
+    newDiv.className="poster";
+    img.className="posterImg";
+
+    botFav.appendChild(document.createTextNode("favorito"));
+    botInf.appendChild(document.createTextNode("Info"));
+    img.setAttribute("src",rutaImg);
+    
+    padre.appendChild(newDiv);
+    newDiv.insertBefore(botInf,null);
+    newDiv.insertBefore(img,botInf);
+    newDiv.insertBefore(botFav,img);  
+}
+function nada(){
+
 }

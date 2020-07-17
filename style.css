@@ -47,11 +47,12 @@ body{
 }
 
 .buscador{
-    display: none;
     height: 100%;
     width: 100%;
     text-align: center;
     font-size: 25px;
+    display: none;
+    grid-template-rows: 20% 80%;
 }
 
 .form-buscador{
@@ -71,6 +72,13 @@ body{
    color:  grey;
    border: grey solid 1px;
    font-size: 25px;
+}
+
+.resultado-buscador{
+    height: 100%;
+    width: 100%;
+   display: grid;
+   grid-template-columns: 30% 75% 5%;
 }
 
 @media screen and (max-width:1030px){
@@ -117,4 +125,29 @@ body{
     body{
         width: 800px;
     }
+}
+
+.poster{
+    display: grid;
+    grid-template-rows:8% 84% 8%;
+    height: 300px;
+    width: 200px;
+    font-size: 15px;
+    text-align: center;
+    border: 2px solid black;
+}
+
+.posterImg{
+   position: relative;
+   height: 100%;
+   width: 100%;
+}
+
+.taquilla{
+    top: 0; left: 0; bottom: 0; right: 0; margin: auto;
+    height: 100%;
+    width: 80%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
 }
