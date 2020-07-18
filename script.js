@@ -2,7 +2,7 @@
 let totalUsu=0;
 let usuLis=[];
 let usuA;
-let lisFav=[];
+let lisFav=new Array();
 let local=0;
 let reg=0;
 let myRequest;
