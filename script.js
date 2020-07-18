@@ -24,7 +24,7 @@ function loadLS(tipo){
         usuLis=JSON.parse(localStorage.getItem("usuLis"));
     }else{
         lisFav=JSON.parse(localStorage.getItem(usuA));
-        if(lisFav !== "undefined"){
+        if(lisFav !== "undefined" && lisFav!=null){
             for(let i=0;i<lisFav.length;i++){
                 crear(lisFav[i][0],lisFav[i][1],2);
             }
