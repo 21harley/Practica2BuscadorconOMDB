@@ -203,7 +203,7 @@ function agregarFavorto(add){
    const padre=add.parentNode;
    crear(padre.childNodes[0].textContent,padre.childNodes[2].getAttribute("src"),2);
    let poster=new Poster(padre.childNodes[0].textContent,padre.childNodes[2].getAttribute("src"));
-   console.log(poster);
+   console.log(lisFav);
    if (typeof lisFav !== 'undefined') {
        lisFav.push(poster);
    }    
