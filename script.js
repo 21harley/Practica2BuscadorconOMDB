@@ -2,6 +2,7 @@
 let totalUsu=0;
 let usuLis=[];
 let lisFav=[];
+let temp=[];
 let usuA;
 let local=0;
 let reg=0;
@@ -95,9 +96,7 @@ function addUsu(){
     }
     sessionStorage.setItem(nameDato,passwordDato);    
     mostrarBuscador();
-    if(res!=0){
-        loadLS(2);
-    }
+    loadLS(2);
     return false;
 }
 
@@ -191,6 +190,7 @@ function crear(nombre,rutaImg,tipo){
     }
     
     botInf.appendChild(document.createTextNode("Info"));
+    botInf.setAttribute("onclick","mostrarInf(this);"); 
     img.setAttribute("src",rutaImg);
     samp.appendChild(document.createTextNode(nombre));
 
@@ -201,11 +201,32 @@ function crear(nombre,rutaImg,tipo){
     newDiv.insertBefore(samp,botFav); 
 }
 function agregarFavorto(add){
-   const padre=add.parentNode;
-   crear(padre.childNodes[0].textContent,padre.childNodes[2].getAttribute("src"),2);
-   let poster=new Poster(padre.childNodes[0].textContent,padre.childNodes[2].getAttribute("src"));
-   creatyPos(poster.name,poster.url);  
-   updateLS();
+   const padre=add.parentNode; let ban=0;
+if(temp!=null){
+    if(temp.length>0){
+        for(let i=0;i<temp.length;i++){
+            if(padre.childNodes[0].innerText.length==temp[i].name.length){
+             retornoInf(add); break;
+            }
+        }
+    }
+}
+if(lisFav!=null){
+    if(lisFav.length>0){
+        for(let i=0;i<lisFav.length;i++){
+            if(padre.childNodes[0].innerText.length==lisFav[i].name.length){
+             ban=1; break;
+            }
+        }
+    }
+}
+   if(ban==0){
+    crear(padre.childNodes[0].textContent,padre.childNodes[2].getAttribute("src"),2);
+    let poster=new Poster(padre.childNodes[0].textContent,padre.childNodes[2].getAttribute("src"));
+    creatyPos(poster.name,poster.url);  
+    updateLS();
+   }
+
 }
 function removeFavorto(elim){
     let p=elim.parentNode;
@@ -231,8 +252,12 @@ function removeFavorto(elim){
 function nada(){
     
 }
-function buscarInformacion(nombre){
-    let info=null,nombre1="";
+
+function mostrarInf(poster){
+    let padre=poster.parentNode; 
+    let mod=padre.childNodes[3],img=padre.childNodes[2];
+    let info="",nombre=padre.childNodes[0].outerText,nombre1=" ";
+    console.log(padre.childNodes);
     for(let i=0;i<nombre.length;i++){
         if(nombre[i]===" "){
             nombre1+="+";
@@ -241,10 +266,42 @@ function buscarInformacion(nombre){
         }
     }
     const http='https://www.omdbapi.com/?t='+nombre1+"&apikey=f160fc54";
-    console.log(http);
     fetch(http).then(response=>response.json())
     .then(data =>{
-       info=data;
+       info="Year:"+data.Year+" Prduction:"+data.Production+" Rutime:"+data.Rutime+" Director:"+data.Director+" Actors:"+data.Actors;
+       console.log(info);
+       let parafo=document.createElement("p");
+       let cambio=document.createElement("button");
+       cambio.appendChild(document.createTextNode("voltear"));
+       parafo.appendChild(document.createTextNode(info));
+       cambio.setAttribute("onclick","retornoInf(this);");
+       let newPoster=new Poster(padre.childNodes[0].innerText,img.getAttribute("src"));
+       temp.push(newPoster);
+       padre.replaceChild(parafo,img);
+       padre.replaceChild(cambio,mod); 
     })
     .catch(err=>console.log(err));
+}
+
+function retornoInf(poster){
+    console.log(temp);
+    let padre=poster.parentNode; 
+    console.log(padre.childNodes);
+    let urlI;
+    for(let i=0;i<temp.length;i++){
+       if(padre.childNodes[0].innerText.length==temp[i].name.length){
+           urlI=temp[i].url;  
+       }
+    }
+    console.log(urlI);
+    let volt=padre.childNodes[3],parrafo=padre.childNodes[2];
+    let img=document.createElement("img");
+    let cambio=document.createElement("button");
+    cambio.appendChild(document.createTextNode("info"));
+    img.setAttribute("src",urlI);
+    img.className="posterImg";
+    cambio.setAttribute("onclick","mostrarInf(this);");
+    padre.replaceChild(img,parrafo);
+    padre.replaceChild(cambio,volt);
+    console.log(padre.childNodes);
 }
