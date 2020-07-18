@@ -18,33 +18,8 @@ function Poster(name ,urlImg){
     this.url=urlImg;
 }
 
-function updateLS(){
-    localStorage.setItem("usuLis", JSON.stringify(usuLis));
-    localStorage.setItem("totalUsu",new String(totalUsu));
-    localStorage.setItem(usuA,JSON.stringify(lisFav));
-}
-
-function loadLS(tipo){
-    if(tipo==1){
-        usuLis=JSON.parse(localStorage.getItem("usuLis"));
-    }else if(tipo==2){
-        
-        lisFav=JSON.parse(localStorage.getItem(usuA));
-        if(lisFav !== "undefined" && lisFav!=null){
-            lisFav.forEach(element => {
-                  if(element.name!=" "){
-                    crear(element.name,element.url,2);
-                  }
-                    
-            })
-        }
-    }else{
-        lisFav=JSON.parse(localStorage.getItem(usuA));
-    }
-}
-
 window.onload=function(even){
-    /* localStorage.clear(); */
+    /*localStorage.clear();*/
    if (typeof(Storage) !== "undefined"){
       local=1;
       totalObj=parseInt(localStorage.getItem("totalUsu"));
@@ -58,8 +33,34 @@ window.onload=function(even){
    }
 }
 
+
+function updateLS(){
+    localStorage.setItem("usuLis", JSON.stringify(usuLis));
+    localStorage.setItem("totalUsu",new String(totalUsu));
+    localStorage.setItem(usuA,JSON.stringify(lisFav));
+}
+
+function loadLS(tipo){
+    if(tipo==1){
+        usuLis=JSON.parse(localStorage.getItem("usuLis"));
+    }else if(tipo==2){
+        lisFav=JSON.parse(localStorage.getItem(usuA));
+        if(lisFav !== "undefined" && lisFav!=null){
+            lisFav.forEach(element => {
+                  if(element.name!=" "){
+                    crear(element.name,element.url,2);
+                  }
+                    
+            })
+        }
+    }
+}
+
 function creaty(name,password){
     let agregar=new User(name,password); usuLis.push(agregar); 
+}
+function creatyPos(name,url){
+    let agregar=new Poster(name,url); lisFav.push(agregar); 
 }
 
 function addUsu(){
@@ -82,16 +83,16 @@ function addUsu(){
             if(element.name==nameDato&&element.password==passwordDato) cont++;
         });
     }
-   
+    usuA=new String(nameDato);
     if(cont==0){
         creaty(nameDato,passwordDato);
         totalUsu++;
+        creatyPos(" "," ");
         updateLS();
         console.log("no esta registrado");res=0;
     }else{
         console.log("Si esta resgistrado");res=1;
     }
-    usuA=nameDato;
     sessionStorage.setItem(nameDato,passwordDato);    
     mostrarBuscador();
     if(res!=0){
@@ -203,10 +204,7 @@ function agregarFavorto(add){
    const padre=add.parentNode;
    crear(padre.childNodes[0].textContent,padre.childNodes[2].getAttribute("src"),2);
    let poster=new Poster(padre.childNodes[0].textContent,padre.childNodes[2].getAttribute("src"));
-   console.log(lisFav);
-   if (typeof lisFav !== 'undefined') {
-       lisFav.push(poster);
-   }    
+   creatyPos(poster.name,poster.url);  
    updateLS();
 }
 function removeFavorto(elim){
@@ -224,10 +222,8 @@ function removeFavorto(elim){
              if(ban==1) break;
          }
          pos++;
-    }
-    if (typeof lisFav !== 'undefined') {
-        lisFav.splice(pos,1);
-    }    
+    }  
+    lisFav.splice(pos,1); 
     a.removeChild(p);
     updateLS();
 }
