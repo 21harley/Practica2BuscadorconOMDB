@@ -256,7 +256,7 @@ function nada(){
 function mostrarInf(poster){
     let padre=poster.parentNode; 
     let mod=padre.childNodes[3],img=padre.childNodes[2];
-    let info="",nombre=padre.childNodes[0].outerText,nombre1=" ";
+    let info="",nombre=padre.childNodes[0].innerText,nombre1=" ";
     console.log(padre.childNodes);
     for(let i=0;i<nombre.length;i++){
         if(nombre[i]===" "){
