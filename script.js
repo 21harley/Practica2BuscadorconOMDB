@@ -13,6 +13,11 @@ function User(name, password) {
     this.password = password;
 }
 
+function Poster(name ,urlImg){
+    this.name=name;
+    this.url=urlImg;
+}
+
 function updateLS(){
     localStorage.setItem("usuLis", JSON.stringify(usuLis));
     localStorage.setItem("totalUsu",new String(totalUsu));
@@ -23,19 +28,19 @@ function loadLS(tipo){
     if(tipo==1){
         usuLis=JSON.parse(localStorage.getItem("usuLis"));
     }else{
+        
         lisFav=JSON.parse(localStorage.getItem(usuA));
         if(lisFav !== "undefined" && lisFav!=null){
             lisFav.forEach(element => {
-                element.forEach(element1=>{
-                    crear(element1[0],element1[1],2);
-                })
-               
+                  
+                    crear(element.name,element.url,2);
             })
         }
     }
 }
 
 window.onload=function(even){
+    /* localStorage.clear(); */
    if (typeof(Storage) !== "undefined"){
       local=1;
       totalObj=parseInt(localStorage.getItem("totalUsu"));
@@ -193,19 +198,28 @@ function crear(nombre,rutaImg,tipo){
 function agregarFavorto(add){
    const padre=add.parentNode;
    crear(padre.childNodes[0].textContent,padre.childNodes[2].getAttribute("src"),2);
-   let cadena=[padre.childNodes[0].textContent,padre.childNodes[2].getAttribute("src")];
-   if (typeof lisFav !== 'undefined') {
-    lisFav.push(new Array(cadena));
-   }
+   let poster=new Poster(padre.childNodes[0].textContent,padre.childNodes[2].getAttribute("src"));
+   console.log(poster);
+    lisFav.push(poster);
    updateLS();
 }
 function removeFavorto(elim){
     let p=elim.parentNode;
     let a=elim.parentNode.parentNode;
-    let cadena=[p.childNodes[0].textContent,p.childNodes[2].getAttribute("src")];
-    if (typeof lisFav !== 'undefined') {
-        lisFav.pop(new Array(cadena));
+    let poster=new Poster(p.childNodes[0].textContent,p.childNodes[2].getAttribute("src"));
+    let pos=0,ban=1;
+    for(let i=0;i<lisFav.length;i++){
+         if(p.childNodes[0].textContent.length==lisFav[i].name.length) {
+            for(let j=0;i<lisFav[i].length;j++){
+                if(p.childNodes[0].textContent[j]==lisFav[i].name[j]){
+                   ban=0; break;
+                }
+            }
+             if(ban==1) break;
+         }
+         pos++;
     }
+    lisFav.splice(pos,1);
     a.removeChild(p);
     updateLS();
 }
