@@ -1,6 +1,7 @@
 
 let totalUsu=0;
 let usuLis=[];
+let lisFav=[];
 let usuA;
 let local=0;
 let reg=0;
@@ -16,8 +17,6 @@ function Poster(name ,urlImg){
     this.name=name;
     this.url=urlImg;
 }
-
-let lisFav=[new Poster(" "," ")];
 
 function updateLS(){
     localStorage.setItem("usuLis", JSON.stringify(usuLis));
@@ -205,7 +204,9 @@ function agregarFavorto(add){
    crear(padre.childNodes[0].textContent,padre.childNodes[2].getAttribute("src"),2);
    let poster=new Poster(padre.childNodes[0].textContent,padre.childNodes[2].getAttribute("src"));
    console.log(poster);
-    lisFav.push(poster);
+   if (typeof lisFav !== 'undefined') {
+       lisFav.push(poster);
+   }    
    updateLS();
 }
 function removeFavorto(elim){
@@ -224,7 +225,9 @@ function removeFavorto(elim){
          }
          pos++;
     }
-    lisFav.splice(pos,1);
+    if (typeof lisFav !== 'undefined') {
+        lisFav.splice(pos,1);
+    }    
     a.removeChild(p);
     updateLS();
 }
