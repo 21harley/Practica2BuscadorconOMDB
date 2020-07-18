@@ -25,9 +25,12 @@ function loadLS(tipo){
     }else{
         lisFav=JSON.parse(localStorage.getItem(usuA));
         if(lisFav !== "undefined" && lisFav!=null){
-            for(let i=0;i<lisFav.length;i++){
-                crear(lisFav[i][0],lisFav[i][1],2);
-            }
+            lisFav.forEach(element => {
+                element.forEach(element1=>{
+                    crear(element1[0],element1[1],2);
+                })
+               
+            })
         }
     }
 }
@@ -191,14 +194,14 @@ function agregarFavorto(add){
    const padre=add.parentNode;
    crear(padre.childNodes[0].textContent,padre.childNodes[2].getAttribute("src"),2);
    let cadena=[padre.childNodes[0].textContent,padre.childNodes[2].getAttribute("src")];
-   lisFav.push(cadena);
+   lisFav.push(new Array(cadena));
    updateLS();
 }
 function removeFavorto(elim){
     let p=elim.parentNode;
     let a=elim.parentNode.parentNode;
     let cadena=[p.childNodes[0].textContent,p.childNodes[2].getAttribute("src")];
-    lisFav.pop(cadena);
+    lisFav.pop(new Array(cadena));
     a.removeChild(p);
     updateLS();
 }
