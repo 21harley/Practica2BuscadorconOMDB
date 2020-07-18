@@ -24,7 +24,7 @@ function loadLS(tipo){
         usuLis=JSON.parse(localStorage.getItem("usuLis"));
     }else{
         lisFav=JSON.parse(localStorage.getItem(usuA));
-        if(lisFav.length>0){
+        if(lisFav !== "undefined"){
             for(let i=0;i<lisFav.length;i++){
                 crear(lisFav[i][0],lisFav[i][1],2);
             }
@@ -82,7 +82,9 @@ function addUsu(){
     usuA=nameDato;
     sessionStorage.setItem(nameDato,passwordDato);    
     mostrarBuscador();
-    if(res!=0) loadLS(2);
+    if(res!=0){
+        loadLS(2);
+    }
     return false;
 }
 
