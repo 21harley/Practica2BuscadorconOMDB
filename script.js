@@ -194,7 +194,7 @@ function agregarFavorto(add){
    const padre=add.parentNode;
    crear(padre.childNodes[0].textContent,padre.childNodes[2].getAttribute("src"),2);
    let cadena=[padre.childNodes[0].textContent,padre.childNodes[2].getAttribute("src")];
-   if (typeof cadena !== 'undefined') {
+   if (typeof lisFav !== 'undefined') {
     lisFav.push(new Array(cadena));
    }
    updateLS();
@@ -203,7 +203,7 @@ function removeFavorto(elim){
     let p=elim.parentNode;
     let a=elim.parentNode.parentNode;
     let cadena=[p.childNodes[0].textContent,p.childNodes[2].getAttribute("src")];
-    if (typeof cadena !== 'undefined') {
+    if (typeof lisFav !== 'undefined') {
         lisFav.pop(new Array(cadena));
     }
     a.removeChild(p);
