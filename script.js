@@ -19,7 +19,7 @@ function Poster(name ,urlImg){
 }
 
 window.onload=function(even){
-    /*localStorage.clear();*/
+    localStorage.clear();
    if (typeof(Storage) !== "undefined"){
       local=1;
       totalObj=parseInt(localStorage.getItem("totalUsu"));
