@@ -2,7 +2,7 @@
 let totalUsu=0;
 let usuLis=[];
 let usuA;
-let lisFav=new Array();
+let lisFav=new Array(new Poster(" "," "));
 let local=0;
 let reg=0;
 let myRequest;
@@ -27,15 +27,19 @@ function updateLS(){
 function loadLS(tipo){
     if(tipo==1){
         usuLis=JSON.parse(localStorage.getItem("usuLis"));
-    }else{
+    }else if(tipo==2){
         
         lisFav=JSON.parse(localStorage.getItem(usuA));
         if(lisFav !== "undefined" && lisFav!=null){
             lisFav.forEach(element => {
-                  
+                  if(element.name!=" "){
                     crear(element.name,element.url,2);
+                  }
+                    
             })
         }
+    }else{
+        lisFav=JSON.parse(localStorage.getItem(usuA));
     }
 }
 
