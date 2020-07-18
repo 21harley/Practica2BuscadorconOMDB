@@ -2,9 +2,12 @@
 let totalUsu=0;
 let usuLis=[];
 let usuA;
+let lisFav=[];
 let local=0;
+let reg=0;
 let myRequest;
 let clave= "f160fc54";
+
 function User(name, password) {
     this.name = name;
     this.password = password;
@@ -13,15 +16,20 @@ function User(name, password) {
 function updateLS(){
     localStorage.setItem("usuLis", JSON.stringify(usuLis));
     localStorage.setItem("totalUsu",new String(totalUsu));
+    localStorage.setItem(usuA,JSON.stringify(lisFav));
 }
 
-function loadLS(){
-    usuLis=JSON.parse(localStorage.getItem("usuLis"));
-    /*
-    usuLis.forEach(element => {
-        //crear(element); son los obj html
-    });
-    */
+function loadLS(tipo){
+    if(tipo==1){
+        usuLis=JSON.parse(localStorage.getItem("usuLis"));
+    }else{
+        lisFav=JSON.parse(localStorage.getItem(usuA));
+        if(lisFav.length>0){
+            for(let i=0;i<lisFav.length;i++){
+                crear(lisFav[i][0],lisFav[i][1],2);
+            }
+        }
+    }
 }
 
 window.onload=function(even){
@@ -29,7 +37,7 @@ window.onload=function(even){
       local=1;
       totalObj=parseInt(localStorage.getItem("totalUsu"));
       if(totalObj>0){
-         loadLS();
+         loadLS(1);
       }else{
           localStorage.setItem("totalUsu","0");totalUsu=0;
       }
@@ -39,7 +47,7 @@ window.onload=function(even){
 }
 
 function creaty(name,password){
-    let agregar=new User(name,password); usuLis.push(agregar);
+    let agregar=new User(name,password); usuLis.push(agregar); 
 }
 
 function addUsu(){
@@ -67,13 +75,14 @@ function addUsu(){
         creaty(nameDato,passwordDato);
         totalUsu++;
         updateLS();
-        console.log("no esta registrado");
+        console.log("no esta registrado");res=0;
     }else{
-        console.log("Si esta resgistrado");
+        console.log("Si esta resgistrado");res=1;
     }
     usuA=nameDato;
-    sessionStorage.setItem(new String(nameDato),new String(passwordDato));    
+    sessionStorage.setItem(nameDato,passwordDato);    
     mostrarBuscador();
+    if(res!=0) loadLS(2);
     return false;
 }
 
@@ -109,23 +118,91 @@ function buscar(){
     fetch(http).then(response=>response.json())
     .then(data =>{
        myRequest=data;
+       mostrar();
     })
     .catch(err=>console.log(err));
-    setTimeout(mostrar,500);
 }
 
 function mostrar(){
-    setTimeout(mostrar,500);
-    if(myRequest.Response.indexOf("T")==0){
+    
+    if(myRequest!=undefined){
         
         myRequest.Search.forEach(element=>{
             if(element.Type.indexOf("m")==0){
-                crear(element.Title.replace(/:/,""),element.Year,element.Poster);
+                crear(element.Title.replace(/:/,""),element.Poster,1);
             }
             
         });
-        
+        myRequest=undefined;
+    } 
+}
+
+function crear(nombre,rutaImg,tipo){
+/*
+        <div class="poster">
+            <button>favorito</button>
+           <img  class="posterImg" src="https://m.media-amazon.com/images/M/MV5BMjMxNjY2MDU1OV5BMl5BanBnXkFtZTgwNzY1MTUwNTM@._V1_SX300.jpg" alt="">
+           <samp class="mensaje">nombre</samp>
+           <button>Info</button>
+        </div> 
+*/
+    let cadena="";
+    if(tipo==1){
+        cadena="taquilla";
+    }else{
+        cadena="favorite";
     }
+    const padre=document.getElementById(cadena);
+    const newDiv=document.createElement("div"); 
+    if(tipo==1){
+        newDiv.id="poster";
+    }
+     
+    const botInf=document.createElement("button");
+    const img=document.createElement("img");
+    const botFav=document.createElement("button");
+    const samp=document.createElement("samp");
+
+    newDiv.className="poster";
+    img.className="posterImg";
+    samp.className="mensaje";
+    
+    if(tipo==1){
+        botFav.appendChild(document.createTextNode("favorito"));
+        botFav.setAttribute("onclick","agregarFavorto(this);");
+    }else{
+        botFav.appendChild(document.createTextNode("Eliminar"));
+        botFav.setAttribute("onclick","removeFavorto(this);");        
+    }
+    
+    botInf.appendChild(document.createTextNode("Info"));
+    img.setAttribute("src",rutaImg);
+    samp.appendChild(document.createTextNode(nombre));
+
+    padre.appendChild(newDiv);
+    newDiv.insertBefore(botInf,null);
+    newDiv.insertBefore(img,botInf);
+    newDiv.insertBefore(botFav,img); 
+    newDiv.insertBefore(samp,botFav); 
+}
+function agregarFavorto(add){
+   const padre=add.parentNode;
+   crear(padre.childNodes[0].textContent,padre.childNodes[2].getAttribute("src"),2);
+   let cadena=[padre.childNodes[0].textContent,padre.childNodes[2].getAttribute("src")];
+   lisFav.push(cadena);
+   updateLS();
+}
+function removeFavorto(elim){
+    let p=elim.parentNode;
+    let a=elim.parentNode.parentNode;
+    let cadena=[p.childNodes[0].textContent,p.childNodes[2].getAttribute("src")];
+    lisFav.pop(cadena);
+    a.removeChild(p);
+    updateLS();
+}
+
+function nada(){
+    
 }
 function buscarInformacion(nombre){
     let info=null,nombre1="";
@@ -143,35 +220,4 @@ function buscarInformacion(nombre){
        info=data;
     })
     .catch(err=>console.log(err));
-}
-function crear(nombre,año,rutaImg){
-/*
-        <div class="poster">
-            <button>favorito</button>
-           <img  class="posterImg" src="https://m.media-amazon.com/images/M/MV5BMjMxNjY2MDU1OV5BMl5BanBnXkFtZTgwNzY1MTUwNTM@._V1_SX300.jpg" alt="">
-           <samp>Avengers: Infinity War</samp>
-           <samp>2018</samp>
-           <button>Info</button>
-        </div> 
-*/
-    const padre=document.getElementById("taquilla");
-    const newDiv=document.createElement("div"); newDiv.id="poster";
-    const botInf=document.createElement("button");
-    const img=document.createElement("img");
-    const botFav=document.createElement("button");
-
-    newDiv.className="poster";
-    img.className="posterImg";
-
-    botFav.appendChild(document.createTextNode("favorito"));
-    botInf.appendChild(document.createTextNode("Info"));
-    img.setAttribute("src",rutaImg);
-    
-    padre.appendChild(newDiv);
-    newDiv.insertBefore(botInf,null);
-    newDiv.insertBefore(img,botInf);
-    newDiv.insertBefore(botFav,img);  
-}
-function nada(){
-
 }
