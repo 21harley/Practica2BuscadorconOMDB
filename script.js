@@ -2,7 +2,6 @@
 let totalUsu=0;
 let usuLis=[];
 let usuA;
-let lisFav=new Array(new Poster(" "," "));
 let local=0;
 let reg=0;
 let myRequest;
@@ -17,6 +16,8 @@ function Poster(name ,urlImg){
     this.name=name;
     this.url=urlImg;
 }
+
+let lisFav=[new Poster(" "," ")];
 
 function updateLS(){
     localStorage.setItem("usuLis", JSON.stringify(usuLis));
