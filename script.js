@@ -21,9 +21,7 @@ function Poster(name ,urlImg){
 }
 
 window.onload=function(even){
-    /*localStorage.clear();
-    https://www.facebook.com/Readycolombia/videos/276713780257153/
-    */
+    /*localStorage.clear();*/
    if (typeof(Storage) !== "undefined"){
       local=1;
       totalObj=parseInt(localStorage.getItem("totalUsu"));
@@ -186,16 +184,18 @@ function crear(nombre,rutaImg,tipo){
 
     img.className="posterImg";
     samp.className="mensaje";
-    
+    botInf.className="button";
+    botFav.className="button";
+
     if(tipo==1){
-        botFav.appendChild(document.createTextNode("favorito"));
+        botFav.appendChild(document.createTextNode("Favorite"));
         botFav.setAttribute("onclick","agregarFavorto(this);");
     }else{
-        botFav.appendChild(document.createTextNode("Eliminar"));
+        botFav.appendChild(document.createTextNode("Delete"));
         botFav.setAttribute("onclick","removeFavorto(this);");        
     }
     
-    botInf.appendChild(document.createTextNode("Info"));
+    botInf.appendChild(document.createTextNode("Information"));
     botInf.setAttribute("onclick","mostrarInf(this);"); 
     img.setAttribute("src",rutaImg);
     samp.appendChild(document.createTextNode(nombre));
@@ -207,7 +207,7 @@ function crear(nombre,rutaImg,tipo){
     newDiv.insertBefore(samp,botFav); 
 }
 function agregarFavorto(add){
-   const padre=add.parentNode; let ban=0;
+   const padre=add.parentNode; let ban=1,cont1=0;
 if(temp!=null){
     if(temp.length>0){
         for(let i=0;i<temp.length;i++){
@@ -217,16 +217,26 @@ if(temp!=null){
         }
     }
 }
+console.log(lisFav);
 if(lisFav!=null){
     if(lisFav.length>0){
         for(let i=0;i<lisFav.length;i++){
             if(padre.childNodes[0].innerText.length==lisFav[i].name.length){
-             ban=1; break;
+                for(let j=0;j<lisFav[i].name.length;j++){
+                    if(padre.childNodes[0].textContent[j]==lisFav[i].name[j]){
+                       cont1++;
+                    }
+                }
+                 if(cont1==lisFav[i].name.length){
+                    ban=0;
+                    break;
+                 }
             }
         }
     }
 }
-   if(ban==0){
+
+   if(ban==1){
     crear(padre.childNodes[0].textContent,padre.childNodes[2].getAttribute("src"),2);
     let poster=new Poster(padre.childNodes[0].textContent,padre.childNodes[2].getAttribute("src"));
     creatyPos(poster.name,poster.url);  
@@ -263,7 +273,6 @@ function mostrarInf(poster){
     let padre=poster.parentNode; 
     let mod=padre.childNodes[3],img=padre.childNodes[2];
     let info="",nombre=padre.childNodes[0].innerText,nombre1=" ";
-    console.log(padre.childNodes);
     for(let i=0;i<nombre.length;i++){
         if(nombre[i]===" "){
             nombre1+="+";
@@ -274,11 +283,11 @@ function mostrarInf(poster){
     const http='https://www.omdbapi.com/?t='+nombre1+"&apikey=f160fc54";
     fetch(http).then(response=>response.json())
     .then(data =>{
-       info="Year:"+data.Year+" Prduction:"+data.Production+" Rutime:"+data.Rutime+" Director:"+data.Director+" Actors:"+data.Actors;
-       console.log(info);
+       info="Year:"+data.Year+" Prduction:"+data.Production+" Rutime:"+data.Runtime+" Director:"+data.Director+" Actors:"+data.Actors;
        let parafo=document.createElement("p");
        let cambio=document.createElement("button");
-       cambio.appendChild(document.createTextNode("voltear"));
+       cambio.className="button";
+       cambio.appendChild(document.createTextNode("Flip"));
        parafo.appendChild(document.createTextNode(info));
        cambio.setAttribute("onclick","retornoInf(this);");
        let newPoster=new Poster(padre.childNodes[0].innerText,img.getAttribute("src"));
@@ -290,24 +299,21 @@ function mostrarInf(poster){
 }
 
 function retornoInf(poster){
-    console.log(temp);
     let padre=poster.parentNode; 
-    console.log(padre.childNodes);
     let urlI;
     for(let i=0;i<temp.length;i++){
        if(padre.childNodes[0].innerText.length==temp[i].name.length){
            urlI=temp[i].url;  
        }
     }
-    console.log(urlI);
     let volt=padre.childNodes[3],parrafo=padre.childNodes[2];
     let img=document.createElement("img");
     let cambio=document.createElement("button");
-    cambio.appendChild(document.createTextNode("info"));
+    cambio.appendChild(document.createTextNode("Information"));
+    cambio.className="button";
     img.setAttribute("src",urlI);
     img.className="posterImg";
     cambio.setAttribute("onclick","mostrarInf(this);");
     padre.replaceChild(img,parrafo);
     padre.replaceChild(cambio,volt);
-    console.log(padre.childNodes);
 }
