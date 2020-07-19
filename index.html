@@ -10,6 +10,10 @@
 
     <div class="content" id="content">
         <h1 class="titulo">Movies of yesterday and today</h1>
+        <div class="form-buscador" action="" id="form-buscador">
+            <label class="form-buscador-entrada-name">Type</label> <input class="form-buscador-entrada-name" type="text" name="" id="name1" required>
+            <input class="form-buscador-entrada-submit" type="submit" value="Input"  onclick="buscar()">
+        </div>
         <div class="registro" id="registro">
             <form class="form-registro" action="" method="post" onsubmit="return addUsu();" >
                 <label class="form-registro-entrada-name">Name</label> <input class="form-registro-entrada-name" type="text" name="" id="name" required>
@@ -18,16 +22,16 @@
             </form>
         </div>
         <div class="buscador" id="buscador">
-           <div class="form-buscador" action="" >
-             <label class="form-buscador-entrada-name">Type</label> <input class="form-buscador-entrada-name" type="text" name="" id="name1" required>
-             <input class="form-buscador-entrada-submit" type="submit" value="Input"  onclick="buscar()">
-           </div>
+            <h2 class="title2">favorite</h2>
+            <h2 class="title2">Movies</h2>
             <div class="resultado-buscador" id="resultado-buscador">
                 <div class="favorite" id="favorite"></div>
+            </div>
+            <div class="resultado-favorita">
                 <div class="taquilla" id="taquilla"></div>
             </div>
         </div>
-    </div>
+    <div>   
 </body>
 <script src="script.js"></script>
 </html>

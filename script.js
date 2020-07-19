@@ -1,9 +1,10 @@
 
-let totalUsu=0;
+let totalUsu;
 let usuLis=[];
 let lisFav=[];
 let temp=[];
 let usuA;
+let pass;
 let local=0;
 let reg=0;
 let myRequest;
@@ -20,7 +21,9 @@ function Poster(name ,urlImg){
 }
 
 window.onload=function(even){
-    /*localStorage.clear();*/
+    /*localStorage.clear();
+    https://www.facebook.com/Readycolombia/videos/276713780257153/
+    */
    if (typeof(Storage) !== "undefined"){
       local=1;
       totalObj=parseInt(localStorage.getItem("totalUsu"));
@@ -38,14 +41,14 @@ window.onload=function(even){
 function updateLS(){
     localStorage.setItem("usuLis", JSON.stringify(usuLis));
     localStorage.setItem("totalUsu",new String(totalUsu));
-    localStorage.setItem(usuA,JSON.stringify(lisFav));
+    localStorage.setItem(usuA+pass,JSON.stringify(lisFav));/* <-- ojo */
 }
 
 function loadLS(tipo){
     if(tipo==1){
         usuLis=JSON.parse(localStorage.getItem("usuLis"));
     }else if(tipo==2){
-        lisFav=JSON.parse(localStorage.getItem(usuA));
+        lisFav=JSON.parse(localStorage.getItem(usuA+pass));
         if(lisFav !== "undefined" && lisFav!=null){
             lisFav.forEach(element => {
                   if(element.name!=" "){
@@ -77,34 +80,34 @@ function addUsu(){
 
     const seeker=document.getElementById("buscador");
     seeker.style.display="grid";
-   
+
     let cont=0;
-    if(usuLis.length>0){
-        usuLis.forEach(element=> {
-            if(element.name==nameDato&&element.password==passwordDato) cont++;
-        });
+    usuA=nameDato;
+    pass=passwordDato;
+    let aux=JSON.parse(localStorage.getItem(usuA+pass));
+    if(aux!== "undefined" && aux!=null){
+             cont++;
     }
-    usuA=new String(nameDato);
+    console.log(cont);
     if(cont==0){
         creaty(nameDato,passwordDato);
         totalUsu++;
-        creatyPos(" "," ");
         updateLS();
-        console.log("no esta registrado");res=0;
+        console.log("no esta registrado");
     }else{
-        console.log("Si esta resgistrado");res=1;
+        console.log("Si esta resgistrado");
     }
     sessionStorage.setItem(nameDato,passwordDato);    
     mostrarBuscador();
-    loadLS(2);
+    if(cont==1) loadLS(2);
     return false;
 }
 
 function mostrarBuscador(){
+    const seeker1=document.getElementById("form-buscador");
+    seeker1.style.display="grid";
     const content=document.getElementById("content");
-    content.style.alignItems="center";
-    content.style.flexDirection="column";
-    content.style.justifyContent="flex-start";
+    content.style.display="block";
 }
 
 function buscar(){
@@ -154,7 +157,7 @@ function mostrar(){
 function crear(nombre,rutaImg,tipo){
 /*
         <div class="poster">
-            <button>favorito</button>
+           <button>favorito</button>
            <img  class="posterImg" src="https://m.media-amazon.com/images/M/MV5BMjMxNjY2MDU1OV5BMl5BanBnXkFtZTgwNzY1MTUwNTM@._V1_SX300.jpg" alt="">
            <samp class="mensaje">nombre</samp>
            <button>Info</button>
@@ -168,8 +171,12 @@ function crear(nombre,rutaImg,tipo){
     }
     const padre=document.getElementById(cadena);
     const newDiv=document.createElement("div"); 
+
     if(tipo==1){
         newDiv.id="poster";
+        newDiv.className="poster";
+    }else{
+        newDiv.className="posterF";
     }
      
     const botInf=document.createElement("button");
@@ -177,7 +184,6 @@ function crear(nombre,rutaImg,tipo){
     const botFav=document.createElement("button");
     const samp=document.createElement("samp");
 
-    newDiv.className="poster";
     img.className="posterImg";
     samp.className="mensaje";
     
