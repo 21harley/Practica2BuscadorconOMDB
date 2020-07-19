@@ -35,7 +35,6 @@ window.onload=function(even){
    }
 }
 
-
 function updateLS(){
     localStorage.setItem("usuLis", JSON.stringify(usuLis));
     localStorage.setItem("totalUsu",new String(totalUsu));
@@ -153,14 +152,6 @@ function mostrar(){
 }
 
 function crear(nombre,rutaImg,tipo){
-/*
-        <div class="poster">
-           <button>favorito</button>
-           <img  class="posterImg" src="https://m.media-amazon.com/images/M/MV5BMjMxNjY2MDU1OV5BMl5BanBnXkFtZTgwNzY1MTUwNTM@._V1_SX300.jpg" alt="">
-           <samp class="mensaje">nombre</samp>
-           <button>Info</button>
-        </div> 
-*/
     let cadena="";
     if(tipo==1){
         cadena="taquilla";
@@ -263,10 +254,6 @@ function removeFavorto(elim){
     lisFav.splice(pos,1); 
     a.removeChild(p);
     updateLS();
-}
-
-function nada(){
-    
 }
 
 function mostrarInf(poster){
